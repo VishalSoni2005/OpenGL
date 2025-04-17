@@ -1,0 +1,26 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build OpenGL",
+      "type": "shell",
+      "command": "C:/MinGW/bin/g++.exe",
+      "args": [
+        "main.cpp",
+        "-IC:/Users/HP/Desktop/Glut/include",
+        "-LC:/Users/HP/Desktop/Glut/lib",
+        "-lfreeglut",
+        "-lopengl32",
+        "-lglu32",
+        "-o",
+        "main.exe"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": ["$gcc"],
+      "detail": "Im Vishal shower"
+    }
+  ]
+}
