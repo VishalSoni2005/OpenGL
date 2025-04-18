@@ -4,13 +4,49 @@
 #include <iostream>
 using namespace std;
 
-void init() {
+void drawPixel(float x, float y) {
+  glBegin(GL_POINTS);
+  glVertex2i(x, y);
+  glEnd();
+}
+
+void drawLineDDA( float x1, float y1, float x2, float y2) {
+
+  // step 1 : calculating dx, dy
+  float dx = x2 - x1;
+  float dy = y2 - y1;
+
+  // step 2 : calculate steps
+  float steps = ( abs(dx) > abs(dy) ) ? abs(dx) : abs(dy);
+
+  // step 3 : calculating increments
+  float xInc = dx / steps;
+  float yInc = dy / steps;
+
+  float x = x1;
+  float y = y1;
+
+  // step 4 : loop ploting
+  for(int i=0; i<steps; i++) {
+    drawPixel(round(x), round(y));
+    x += xInc;
+    y += yInc;
+
+  }
+}
+
+void init() { // initial state of window
   glClearColor(0.0, 0.0, 0.0, 0.0); //black
-  glMatrixMode(GL_PROJECTION);
+  // glMatrixMode(GL_PROJECTION);
+  glPointSize(2.0);
+  glColor3f(1, 1, 1); //Setting Drawing Color to white
   gluOrtho2D(0, 600, 0, 600);
 }
+
 void display() {
   glClear(GL_COLOR_BUFFER_BIT);
+  glColor3f(1, 1, 1); // Setting Drawing Color to white
+  drawLineDDA(50, 50, 300, 300); // Example: Draw line from (50, 50) to (300, 300)
   glFlush();
 }
 
@@ -20,8 +56,11 @@ int main(int argc, char **argv) {
   glutInitWindowSize(400, 400);
   glutInitWindowPosition(0, 0);
   glutCreateWindow("DDA Practical 2");
-
   init();
+
+  glutDisplayFunc(display);
+  glutMainLoop();
+  return 0;
 
 }
 
