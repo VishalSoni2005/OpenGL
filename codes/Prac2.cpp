@@ -23,21 +23,23 @@ void SimpleLine(float x1, float y1, float x2, float y2)
 {
   float step;
 
+  // step : 1
   float dx = x2 - x1;
   float dy = y2 - y1;
 
+  // step 2;
   if (abs(dx) > abs(dy))
-  {
     step = abs(dx);
-  }
   else
     step = abs(dy);
 
+  // step 3
   float Xinc = dx / step;
   float Yinc = dy / step;
   float x = x1;
   float y = y1;
 
+  // step 4
   for (int i = 0; i <= step; i++)
   {
     displayPoint(x, y);
@@ -49,22 +51,26 @@ void SimpleLine(float x1, float y1, float x2, float y2)
 
 void DottedLine(float x1, float y1, float x2, float y2)
 {
+  // step 1
   float step;
 
   float dx = x2 - x1;
   float dy = y2 - y1;
 
+  // step 2
   if (abs(dx) > abs(dy))
   {
     step = abs(dx);
   }
   else
     step = abs(dy);
-
+// step 3
   float Xinc = dx / (float)step;
   float Yinc = dy / (float)step;
   float x = x1;
   float y = y1;
+
+  // step 4
   displayPoint(x, y);
 
   for (int i = 0; i <= step; i++)
@@ -159,10 +165,8 @@ void ThickLine(float x1, float y1, float x2, float y2)
 void myMouse(int button, int state, int x, int y)
 {
   static int xst, yst, pt = 0;
-  if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-  {
-    if (pt == 0)
-    {
+  if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN){
+    if (pt == 0){
       xst = x;
       yst = y;
 
@@ -198,6 +202,10 @@ void myMouse(int button, int state, int x, int y)
   // Clear Screen
   glFlush();
 }
+
+
+
+
 
 void keyboard(unsigned char key, int x, int y)
 {
