@@ -64,7 +64,7 @@ void DottedLine(float x1, float y1, float x2, float y2)
   }
   else
     step = abs(dy);
-// step 3
+  // step 3
   float Xinc = dx / (float)step;
   float Yinc = dy / (float)step;
   float x = x1;
@@ -165,8 +165,10 @@ void ThickLine(float x1, float y1, float x2, float y2)
 void myMouse(int button, int state, int x, int y)
 {
   static int xst, yst, pt = 0;
-  if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN){
-    if (pt == 0){
+  if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+  {
+    if (pt == 0)
+    {
       xst = x;
       yst = y;
 
@@ -202,10 +204,6 @@ void myMouse(int button, int state, int x, int y)
   // Clear Screen
   glFlush();
 }
-
-
-
-
 
 void keyboard(unsigned char key, int x, int y)
 {

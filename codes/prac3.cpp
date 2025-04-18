@@ -15,6 +15,7 @@ void Simpleline(int x1, int y1, int x2, int y2)
 	{
 		M = (y2 - y1) / (x2 - x1);
 	}
+  
 	if (abs(M) < 1)
 	{
 		if (x1 > x2)
