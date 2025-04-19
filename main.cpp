@@ -284,6 +284,50 @@ void original(int x1, int y1, int x2, int y2)
   glFlush();
 }
 
+void practiceTwo(int x1, int y1, int x2, int y2){
+  int slope;
+  if(x2 - x1 == 0) slope = (y2 - y1);
+  else slope = (y2 - y1) / (x2 - x1);
+
+  if(abs(slope) < 1){
+    if(x1 > x1) {
+      swap(x1, x2);
+      swap(y1, y2);
+    }
+
+    int dx = abs(x2 - x1);
+    int dy = abs(y2 - y1);
+    int p = 2 * dy - dx;
+    int x = x1;
+    int y = y1;
+    glBegin(GL_POINTS);
+
+    while( x <= x2) {
+      glVertex2i(x, y);
+      x++;
+
+     if(p >= 0) {
+       if (slope < 1)
+         y++;
+       else
+         y--;
+
+       p = p + 2 * (dy - dx);
+     }
+     else {
+      y = y;
+      p = p + 2 * dy;
+     }
+    }
+    
+    glEnd();
+  }
+  if(abs(slope) >= 1) {
+
+  }
+  glFlush();
+}
+
 void drawChessboard(int boardSize)
 {
   int squareSize = 600 / boardSize;
