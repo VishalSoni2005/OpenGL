@@ -4,6 +4,7 @@
 
 using namespace std;
 
+//! Bresenham's line drawing algorithm
 void Simpleline(int x1, int y1, int x2, int y2)
 {
 	int M, p, dx, dy, x, y, t;

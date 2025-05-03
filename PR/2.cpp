@@ -11,8 +11,8 @@ void displayPoint(int x, int y)
   glVertex2i(x, y);
   glEnd();
 }
-float x01, x2, y01, y2;
-int ch;
+// float x01, x2, y01, y2;
+// int ch;
 void SimpleLine(float x1, float y1, float x2, float y2)
 {
   float dx, dy, p;

@@ -18,6 +18,7 @@ void displayPoint(int x, int y)
 }
 float x01, x2, y01, y2;
 int ch;
+
 void SimpleLine(float x1, float y1, float x2, float y2)
 {
   float dx, dy, p;
@@ -26,29 +27,32 @@ void SimpleLine(float x1, float y1, float x2, float y2)
   float x, y;
   dx = x2 - x1;
   dy = y2 - y1;
+
   if (dx < 0)
-  {
+  
     dx = -dx;
-  }
+  
   if (dy < 0)
-  {
+  
     dy = -dy;
-  }
+  
   incx = 1;
   if (x2 < x1)
-  {
+  
     incx = -1;
-  }
+  
   incy = 1;
   if (y2 < y1)
-  {
+  
     incy = -1;
-  }
+  
   x = x1;
   y = y1;
+
+
   if (dx > dy)
   {
-    displayPoint(x, y);
+    displayPoint(x, y); // first point
     p = 2 * dy - dx;
     inc1 = 2 * (dy - dx);
     inc2 = 2 * dy;
@@ -65,7 +69,7 @@ void SimpleLine(float x1, float y1, float x2, float y2)
         x = x + incx;
         p = p + inc2;
       }
-      displayPoint(x, y);
+      displayPoint(x, y); // other point
     }
   }
   else
@@ -92,6 +96,7 @@ void SimpleLine(float x1, float y1, float x2, float y2)
   }
   glFlush();
 }
+
 void DottedLine(float x1, float y1, float x2, float y2)
 {
   float dx, dy, p;
@@ -200,6 +205,7 @@ void DottedLine(float x1, float y1, float x2, float y2)
   }
   glFlush();
 }
+
 void DashedLine(float x1, float y1, float x2, float y2)
 {
   float dx, dy, p;
@@ -341,6 +347,7 @@ void DashedLine(float x1, float y1, float x2, float y2)
     glFlush();
   }
 }
+
 void DashedDottedLine(float x1, float y1, float x2, float y2)
 {
   float dx, dy, p;
