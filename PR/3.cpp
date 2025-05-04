@@ -13,6 +13,7 @@ struct Point
   int xc;
   int yc;
 } p[10];
+
 int i = 0;
 int n;
 
@@ -20,6 +21,7 @@ bool flag = true;
 int tx, ty, sx, sy;
 int angle;
 int px, py;
+
 void displayPoint(int x, int y)
 {
   glColor3f(0, 0, 1);
@@ -109,6 +111,9 @@ void myDisplay()
   glClear(GL_COLOR_BUFFER_BIT);
   glColor3f(0.0f, 0.0f, 0.0f);
 }
+
+
+
 void myMouse(int button, int state, int x, int y)
 {
   if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
@@ -144,6 +149,8 @@ void myMouse(int button, int state, int x, int y)
     glFlush();
   }
 }
+
+
 int main(int argc, char **argv)
 {
   glutInit(&argc, argv);
@@ -153,8 +160,10 @@ int main(int argc, char **argv)
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   gluOrtho2D(0, 600, 0, 600);
+
   glutDisplayFunc(myDisplay);
   glutMouseFunc(myMouse);
+
   glutMainLoop();
   return (0);
 }

@@ -124,6 +124,8 @@ void drawCircle(int xc, int yc, int radius)
   }
   glEnd(); // End drawing points for the circle
 }
+
+
 void mouse(int button, int state, int x, int y)
 {
   static int xst, yst, pt = 0;
@@ -160,6 +162,8 @@ void mouse(int button, int state, int x, int y)
       drawCircle(xc, yc, r);
     }
   }
+
+  
   else if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
   {
     pt = 0;
