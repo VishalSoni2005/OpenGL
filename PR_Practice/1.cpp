@@ -20,6 +20,7 @@ void breLine(int x1, int y1, int x2, int y2)
     int p = 2 * dy - dx;
     for (int i = 0; i <= dx; i++)
     {
+      glVertex2i(x, y); // <-- PLOT the point here
       x += sx;
       if (p >= 0)
       {
@@ -32,6 +33,10 @@ void breLine(int x1, int y1, int x2, int y2)
       }
     }
   }
+
+
+
+  
   else
   { // slope >= 1
     int p = 2 * dx - dy;

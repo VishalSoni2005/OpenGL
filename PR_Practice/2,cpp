@@ -1,0 +1,152 @@
+
+#include <GL/glut.h>
+#include <stdlib.h>
+#include <iostream>
+using namespace std;
+
+void displayPoint(int x, int y)
+{
+  glColor3f(1, 1, 0);
+  glPointSize(3);
+  glBegin(GL_POINTS);
+  glVertex2i(x, y);
+  glEnd();
+}
+
+void SimpleLine(int x1, int y1, int x2, int y2)
+{
+  int dx = abs(x2 - x1);
+  int dy = abs(y2 - y1);
+  int x = x1, y = y1;
+
+  int sx = (x2 > x1) ? 1 : -1;
+  int sy = (y2 > y1) ? 1 : -1;
+
+  glBegin(GL_POINTS);
+
+  if (dx > dy)
+  { // slope < 1
+    int p = 2 * dy - dx;
+    for (int i = 0; i <= dx; i++)
+    {
+      glVertex2i(x, y);
+      x += sx;
+      if (p >= 0)
+      {
+        y += sy;
+        p += 2 * (dy - dx);
+      }
+      else
+      {
+        p += 2 * dy;
+      }
+    }
+  }
+  else
+  { // slope >= 1
+    int p = 2 * dx - dy;
+    for (int i = 0; i <= dy; i++)
+    {
+      glVertex2i(x, y);
+      y += sy;
+      if (p >= 0)
+      {
+        x += sx;
+        p += 2 * (dx - dy);
+      }
+      else
+      {
+        p += 2 * dx;
+      }
+    }
+  }
+
+  glEnd();
+  glFlush();
+}
+
+void mouse(int button, int state, int x, int y)
+{
+  static int startX, startY;
+  static int clickCount = 0;
+
+  int endX, endY;
+  int centerX, centerY;
+
+  if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+  {
+    // First click - store starting point
+    if (clickCount == 0)
+    {
+      startX = x;
+      startY = 600 - y; // Convert to OpenGL coordinates (bottom-left origin)
+      clickCount++;
+    }
+    else
+    {
+      // Second click - get end point and draw shapes
+      endX = x;
+      endY = 600 - y;
+
+      // Outer Square
+      SimpleLine(startX, startY, endX, startY);
+      SimpleLine(endX, startY, endX, endY);
+      SimpleLine(endX, endY, startX, endY);
+      SimpleLine(startX, endY, startX, startY);
+
+      // Middle Square (rotated, diamond shape)
+      centerX = (startX + endX) / 2;
+      centerY = (startY + endY) / 2;
+
+      SimpleLine(centerX, endY, startX, centerY);
+      SimpleLine(startX, centerY, centerX, startY);
+      SimpleLine(centerX, startY, endX, centerY);
+      SimpleLine(endX, centerY, centerX, endY);
+
+      // Inner Square (central box)
+      int innerLeftX = (startX + centerX) / 2;
+      int innerTopY = (endY + centerY) / 2;
+      int innerBottomY = (startY + centerY) / 2;
+      int innerRightX = (endX + centerX) / 2;
+
+      SimpleLine(innerLeftX, innerTopY, innerLeftX, innerBottomY);
+      SimpleLine(innerLeftX, innerBottomY, innerRightX, innerBottomY);
+      SimpleLine(innerRightX, innerBottomY, innerRightX, innerTopY);
+      SimpleLine(innerRightX, innerTopY, innerLeftX, innerTopY);
+    }
+  }
+  else if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
+  {
+    clickCount = 0;               // Reset click state
+    glClear(GL_COLOR_BUFFER_BIT); // Clear the drawing
+    glutPostRedisplay();          // Redraw the screen
+  }
+
+  glFlush(); // Force execution of GL commands
+}
+
+void initialize(void)
+{
+  glClearColor(1.0, 1.0, 1.0, 1.0);
+  glClear(GL_COLOR_BUFFER_BIT);
+  gluOrtho2D(0, 600, 0, 600);
+}
+void primitives(void)
+{
+  glColor3f(1, 0, 0);
+  glutMouseFunc(mouse);
+}
+int main(int argc, char **argv)
+// IDPSC
+{
+  glutInit(&argc, argv);
+  glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+  glutInitWindowPosition(0, 0);
+  glutInitWindowSize(600, 600);
+  glutCreateWindow("OpenGL - Bresenham's Algorithm");
+
+  initialize();
+  glutDisplayFunc(primitives);
+  glutMainLoop();
+  return 0;
+}

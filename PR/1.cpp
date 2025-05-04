@@ -52,7 +52,7 @@ void SimpleLine(float x1, float y1, float x2, float y2)
 
   if (dx > dy)
   {
-    displayPoint(x, y); // first point
+    displayPoint(x, y); 
     p = 2 * dy - dx;
     inc1 = 2 * (dy - dx);
     inc2 = 2 * dy;
@@ -69,7 +69,7 @@ void SimpleLine(float x1, float y1, float x2, float y2)
         x = x + incx;
         p = p + inc2;
       }
-      displayPoint(x, y); // other point
+      displayPoint(x, y);
     }
   }
   else

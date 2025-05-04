@@ -56,6 +56,7 @@ void SimpleLine(float x1, float y1, float x2, float y2)
   }
   glFlush();
 }
+
 void drawCircle(int xc, int yc, int radius)
 {
   int x = 0;
