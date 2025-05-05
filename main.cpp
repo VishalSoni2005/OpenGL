@@ -268,7 +268,6 @@
 //   return 0;
 // }
 
-
 //! TRANSFORMATION AND TRANSLATION
 // #include <GL/glut.h>
 // #include <iostream>
@@ -358,7 +357,6 @@
 //   glutMainLoop();
 //   return 0;
 // }
-
 
 //! translation and scalling
 // #include <iostream>
@@ -464,56 +462,213 @@
 //   return 0;
 // }
 
-
 //! translation and rotation
+// #include <GL/freeglut.h>
+// #include <iostream>
+// #include <cmath>
+//     using namespace std;
+
+// struct Point2D
+// {
+//   float x;
+//   float y;
+// };
+
+// // Original triangle vertices
+// Point2D originalTriangle[3] = {
+//     {200, 200},
+//     {300, 400},
+//     {400, 200}};
+
+// // Rotated triangle vertices
+// Point2D rotatedTriangle[3];
+
+// // Rotation angle in degrees
+// float angle = 45.0;
+
+// // Convert degrees to radians
+// float degToRad(float degree)
+// {
+//   return degree * 3.14  / 180.0;
+// }
+
+// // Draw triangle with specified color
+// void drawTriangle(Point2D points[], float r, float g, float b)
+// {
+//   glColor3f(r, g, b);
+//   glBegin(GL_LINE_LOOP);
+//   for (int i = 0; i < 3; i++)
+//   {
+//     glVertex2f(points[i].x, points[i].y);
+//   }
+//   glEnd();
+// }
+
+// // Compute centroid of triangle
+// Point2D getCentroid(Point2D tri[])
+// {
+//   Point2D c;
+//   c.x = (tri[0].x + tri[1].x + tri[2].x) / 3.0;
+//   c.y = (tri[0].y + tri[1].y + tri[2].y) / 3.0;
+//   return c;
+// }
+
+// void init()
+// {
+//   glClearColor(1, 1, 1, 1); // white background
+//   glPointSize(2);
+//   gluOrtho2D(0, 600, 0, 600);
+// }
+
+// void drawAxis()
+// {
+//   glColor3f(0, 1, 0.2); // green axes
+//   glBegin(GL_LINES);
+//   glVertex2i(300, 0);
+//   glVertex2i(300, 600); // Y-axis
+//   glVertex2i(0, 300);
+//   glVertex2i(600, 300); // X-axis
+//   glEnd();
+// }
+
+// void display()
+// {
+//   glClear(GL_COLOR_BUFFER_BIT);
+
+//   drawAxis();
+
+//   // Draw original triangle (black)
+//   drawTriangle(originalTriangle, 0, 0, 0);
+
+//   // Compute centroid
+//   Point2D centroid = getCentroid(originalTriangle);
+
+//   // Calculate rotated points
+//   float rad = degToRad(angle);
+//   for (int i = 0; i < 3; i++)
+//   {
+//     float x = originalTriangle[i].x - centroid.x;
+//     float y = originalTriangle[i].y - centroid.y;
+
+//     rotatedTriangle[i].x = centroid.x + (x * cos(rad) - y * sin(rad));
+//     rotatedTriangle[i].y = centroid.y + (x * sin(rad) + y * cos(rad));
+//   }
+
+//   // Draw rotated triangle (red)
+//   drawTriangle(rotatedTriangle, 1, 0, 0);
+
+//   glFlush();
+// }
+
+// int main(int argc, char **argv)
+// {
+//   glutInit(&argc, argv);
+//   glutInitDisplayMode(GLUT_SINGLE);
+//   glutInitWindowPosition(0, 0);
+//   glutInitWindowSize(600, 600);
+//   glutCreateWindow("Triangle Rotation Around Centroid");
+
+//   init();
+//   glutDisplayFunc(display);
+//   glutMainLoop();
+//   return 0;
+// }
+
+//! 4
 #include <GL/freeglut.h>
 #include <iostream>
 #include <cmath>
-    using namespace std;
+using namespace std;
 
-struct Point2D
+void line(int x1, int y1, int x2, int y2)
 {
-  float x;
-  float y;
-};
+  int sx = (x2 > x1) ? 1 : -1;
+  int sy = (y2 > y1) ? 1 : -1;
 
-// Original triangle vertices
-Point2D originalTriangle[3] = {
-    {200, 200},
-    {300, 400},
-    {400, 200}};
+  int dy = abs(y2 - y1);
+  int dx = abs(x2 - x1);
 
-// Rotated triangle vertices
-Point2D rotatedTriangle[3];
+  int p;
 
-// Rotation angle in degrees
-float angle = 45.0;
+  int x = x1, y = y1;
 
-// Convert degrees to radians
-float degToRad(float degree)
-{
-  return degree * 3.14  / 180.0;
-}
+  glBegin(GL_POINTS);
+  glVertex2i(x, y); // Plot point
 
-// Draw triangle with specified color
-void drawTriangle(Point2D points[], float r, float g, float b)
-{
-  glColor3f(r, g, b);
-  glBegin(GL_LINE_LOOP);
-  for (int i = 0; i < 3; i++)
+  if (dx > dy)
   {
-    glVertex2f(points[i].x, points[i].y);
+
+    p = 2 * dy - dx;
+    for (int i = 0; i <= dx; i++)
+    {
+      glVertex2i(x, y); // Plot point
+      x += sx;
+      if (p < 0)
+        p += 2 * dy;
+      else
+      {
+        y += sy;
+        p += 2 * (dy - dx);
+      }
+    }
   }
+
+  else
+  {
+    p = 2 * dx - dy;
+    for (int i = 0; i <= dy; i++)
+    {
+      glVertex2i(x, y); // Plot point
+      y += sy;
+      if (p < 0)
+        p += 2 * dx;
+      else
+      {
+        x += sx;
+        p += 2 * (dx - dy);
+      }
+    }
+  }
+
   glEnd();
+  glFlush();
 }
 
-// Compute centroid of triangle
-Point2D getCentroid(Point2D tri[])
+void plotCirclePoint(int xc, int yc, int x, int y)
 {
-  Point2D c;
-  c.x = (tri[0].x + tri[1].x + tri[2].x) / 3.0;
-  c.y = (tri[0].y + tri[1].y + tri[2].y) / 3.0;
-  return c;
+  glVertex2i(xc + x, yc + y);
+  glVertex2i(xc - x, yc + y);
+  glVertex2i(xc + x, yc - y);
+  glVertex2i(xc - x, yc - y);
+  glVertex2i(xc + y, yc + x);
+  glVertex2i(xc - y, yc + x);
+  glVertex2i(xc + y, yc - x);
+  glVertex2i(xc - y, yc - x);
+}
+
+void circle(int xc, int yc, int r)
+{
+  int x = 0, y = r;
+  int d = 3 - 2 * r;
+
+  glBegin(GL_POINTS);
+  plotCirclePoint(xc, yc, x, y);
+
+  while (y >= x)
+  {
+    x++;
+    plotCirclePoint(xc, yc, x, y);
+    if (d < 0)
+      d += 4 * x + 6;
+    else
+    {
+      y--;
+      d += 4 * (x - y) + 10;
+    }
+  }
+
+  glEnd();
+  glFlush();
 }
 
 void init()
@@ -534,31 +689,25 @@ void drawAxis()
   glEnd();
 }
 
+int clickX = 0, clickY = 0; // Declare variables to store mouse click coordinates
+
+void mousefn(int button, int state, int x, int y)
+{
+  if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+  {
+    clickX = x;
+    clickY = 600 - y;    // Flip y to match OpenGL coords
+    glutPostRedisplay(); // Ask //GLUT to call display()
+  }
+}
+
 void display()
 {
   glClear(GL_COLOR_BUFFER_BIT);
-
+  
+  if(clickX > 0)
+    circle(clickX, clickY, 200);
   drawAxis();
-
-  // Draw original triangle (black)
-  drawTriangle(originalTriangle, 0, 0, 0);
-
-  // Compute centroid
-  Point2D centroid = getCentroid(originalTriangle);
-
-  // Calculate rotated points
-  float rad = degToRad(angle);
-  for (int i = 0; i < 3; i++)
-  {
-    float x = originalTriangle[i].x - centroid.x;
-    float y = originalTriangle[i].y - centroid.y;
-
-    rotatedTriangle[i].x = centroid.x + (x * cos(rad) - y * sin(rad));
-    rotatedTriangle[i].y = centroid.y + (x * sin(rad) + y * cos(rad));
-  }
-
-  // Draw rotated triangle (red)
-  drawTriangle(rotatedTriangle, 1, 0, 0);
 
   glFlush();
 }
@@ -569,10 +718,11 @@ int main(int argc, char **argv)
   glutInitDisplayMode(GLUT_SINGLE);
   glutInitWindowPosition(0, 0);
   glutInitWindowSize(600, 600);
-  glutCreateWindow("Triangle Rotation Around Centroid");
+  glutCreateWindow("4");
 
   init();
   glutDisplayFunc(display);
+  glutMouseFunc(mousefn);
   glutMainLoop();
   return 0;
 }
