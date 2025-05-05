@@ -87,6 +87,18 @@ void SimpleLine(float x1, float y1, float x2, float y2)
   }
   glFlush();
 }
+
+
+
+
+
+
+
+
+
+
+
+
 void mouse(int button, int state, int x, int y)
 {
   static int xst, yst, pt = 0;
@@ -134,6 +146,9 @@ void mouse(int button, int state, int x, int y)
   }
   glFlush();
 }
+
+
+
 void initialize(void)
 {
   glClearColor(1.0, 1.0, 1.0, 1.0);

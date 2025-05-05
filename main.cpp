@@ -1,93 +1,47 @@
-// //* bresenham line and circle drawing algo
-// #include <GL/freeglut.h>
+// //! WORKING CODE OF TWO
+// #include <GL/glut.h>
 // #include <iostream>
 // using namespace std;
 
-// void plotCirclePoints(int xc, int yc, int x, int y)
-// {
-//   glVertex2i(xc + x, yc + y);
-//   glVertex2i(xc - x, yc + y);
-//   glVertex2i(xc + x, yc - y);
-//   glVertex2i(xc - x, yc - y);
-//   glVertex2i(xc + y, yc + x);
-//   glVertex2i(xc - y, yc + x);
-//   glVertex2i(xc + y, yc - x);
-//   glVertex2i(xc - y, yc - x);
-// }
-
-// void drawCircle(int xc, int yc, int r)
-// {
-//   int x = 0, 
-//   y = r;
-
-//   int p = 3 - 2 * r;
-
-//   glBegin(GL_POINTS);
-//   while (x <= y)
-//   {
-//     plotCirclePoints(xc, yc, x, y);
-//     x++;
-//     if (p < 0)
-//       p = p + 4 * x + 6;
-//     else
-//     {
-//       y--;
-//       p = p + 4 * (x - y) + 10;
-//     }
-//   }
-//   glEnd();
-//   glFlush();
-// }
-
-// void line(int x1, int y1, int x2, int y2)
+// // Bresenham's Line Drawing Algorithm
+// void SimpleLine(int x1, int y1, int x2, int y2)
 // {
 //   int dx = abs(x2 - x1);
 //   int dy = abs(y2 - y1);
-
-//   int p;
 //   int sx = (x2 > x1) ? 1 : -1;
 //   int sy = (y2 > y1) ? 1 : -1;
-
-//   int x = x1;
-//   int y = y1;
+//   int x = x1, y = y1;
 
 //   glBegin(GL_POINTS);
-
 //   if (dx > dy)
 //   {
-//     p = 2 * dy - dx;
-
+//     int p = 2 * dy - dx;
 //     for (int i = 0; i <= dx; i++)
 //     {
 //       glVertex2i(x, y);
 //       x += sx;
-
-//       if (p >= 0)
+//       if (p < 0)
+//         p += 2 * dy;
+//       else
 //       {
 //         y += sy;
 //         p += 2 * (dy - dx);
 //       }
-//       else
-//         p += 2 * dy;
 //     }
 //   }
-
 //   else
 //   {
-//     p = 2 * dx - dy;
+//     int p = 2 * dx - dy;
 //     for (int i = 0; i <= dy; i++)
 //     {
 //       glVertex2i(x, y);
 //       y += sy;
-
-//       if (p >= 0)
+//       if (p < 0)
+//         p += 2 * dx;
+//       else
 //       {
 //         x += sx;
 //         p += 2 * (dx - dy);
-//       }
-//       else
-//       {
-//         p += 2 * dx;
 //       }
 //     }
 //   }
@@ -95,58 +49,104 @@
 //   glFlush();
 // }
 
+// // Setup OpenGL
 // void init()
-// { //* CCOPS
+// {
 //   glClearColor(0, 0, 0, 1);
-//   glColor3f(1, 1, 1);
 //   gluOrtho2D(0, 600, 0, 600);
-//   glPointSize(2);
+//   glColor3f(1, 1, 1);
+//   glPointSize(1);
 // }
 
+// // Mouse callback for drawing pattern
+// void mousefn(int button, int state, int x, int y)
+// {
+//   static int clickCount = 0;
+//   static int startX, startY;
+
+//   int clickedX = x;
+//   int clickedY = 600 - y; // Convert to OpenGL coordinates
+
+//   if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+//   {
+//     if (clickCount == 0)
+//     {
+//       startX = clickedX;
+//       startY = clickedY;
+//       clickCount++;
+//     }
+//     else
+//     {
+//       int endX = clickedX;
+//       int endY = clickedY;
+
+//       // === Outer Rectangle ===
+//       SimpleLine(startX, startY, endX, startY);
+//       SimpleLine(endX, startY, endX, endY);
+//       SimpleLine(endX, endY, startX, endY);
+//       SimpleLine(startX, endY, startX, startY);
+
+//       // === Diamond Shape ===
+//       int midX = (startX + endX) / 2;
+//       int midY = (startY + endY) / 2;
+//       SimpleLine(midX, endY, startX, midY);
+//       SimpleLine(startX, midY, midX, startY);
+//       SimpleLine(midX, startY, endX, midY);
+//       SimpleLine(endX, midY, midX, endY);
+
+//       // === Inner Rectangle ===
+//       int innerLeftX = (startX + midX) / 2;
+//       int innerTopY = (endY + midY) / 2;
+//       int innerBottomY = (startY + midY) / 2;
+//       int innerRightX = (endX + midX) / 2;
+
+//       SimpleLine(innerLeftX, innerTopY, innerLeftX, innerBottomY);
+//       SimpleLine(innerLeftX, innerBottomY, innerRightX, innerBottomY);
+//       SimpleLine(innerRightX, innerBottomY, innerRightX, innerTopY);
+//       SimpleLine(innerRightX, innerTopY, innerLeftX, innerTopY);
+
+//       clickCount = 0;
+//     }
+//   }
+//   else if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
+//   {
+//     glClear(GL_COLOR_BUFFER_BIT);
+//     glFlush();
+//     clickCount = 0;
+//   }
+// }
+
+// // Display function
 // void display()
 // {
 //   glClear(GL_COLOR_BUFFER_BIT);
-//   drawCircle(300, 300, 100);
-
-//   line(0, 0, 600, 600);
 //   glFlush();
 // }
 
 // int main(int argc, char **argv)
 // {
-//   //! IDPSC
 //   glutInit(&argc, argv);
 //   glutInitDisplayMode(GLUT_SINGLE);
-//   glutInitWindowPosition(0, 0);
 //   glutInitWindowSize(600, 600);
-//   glutCreateWindow("Todays practice");
+//   glutInitWindowPosition(100, 100);
+//   glutCreateWindow("Pattern Drawing");
 
 //   init();
 //   glutDisplayFunc(display);
+//   glutMouseFunc(mousefn);
 //   glutMainLoop();
 //   return 0;
 // }
 
-// left click to select vertices of polygon , after that right click and choose option to proceed
+//! code of THREE
 #include <GL/glut.h>
 #include <cmath>
 #include <iostream>
 using namespace std;
 
-struct Point
-{
-  int xc;
-  int yc;
-} p[10];
-int i = 0;
-int n;
-
+int x[10], y[10];
+int i = 0, n;
 bool flag = true;
-int tx, ty, sx, sy;
-struct Point translated_p[10];
-struct Point scaled_p[10];
-bool translated = false;
-bool scaled = false;
 
 void displayPoint(int x, int y)
 {
@@ -159,46 +159,57 @@ void displayPoint(int x, int y)
 
 void SimpleLine(float x1, float y1, float x2, float y2)
 {
-  float step;
   float dx = x2 - x1;
   float dy = y2 - y1;
-
-  if (abs(dx) > abs(dy))
-  {
-    step = abs(dx);
-  }
-  else
-  {
-    step = abs(dy);
-  }
+  float step = (abs(dx) > abs(dy)) ? abs(dx) : abs(dy);
 
   float Xinc = dx / step;
   float Yinc = dy / step;
   float x = x1;
   float y = y1;
 
-  for (int j = 0; j <= step; j++)
+  for (int i = 0; i <= step; i++)
   {
     displayPoint(round(x), round(y));
-    x = x + Xinc;
-    y = y + Yinc;
+    x += Xinc;
+    y += Yinc;
   }
   glFlush();
 }
 
-void drawPolygon(struct Point points[], int num_points)
+void drawCircle(int xc, int yc, int radius)
 {
+  int x = 0, y = radius;
+  int p = 3 - 2 * radius;
 
-  glPointSize(1.0);
-  int j;
-  for (j = 0; j < num_points - 1; j++)
+  while (x <= y)
   {
-    SimpleLine(points[j].xc, points[j].yc, points[j + 1].xc, points[j + 1].yc);
+    glBegin(GL_POINTS);
+    glVertex2i(xc + x, yc + y);
+    glVertex2i(xc + y, yc + x);
+    glVertex2i(xc - x, yc + y);
+    glVertex2i(xc - y, yc + x);
+    glVertex2i(xc - x, yc - y);
+    glVertex2i(xc - y, yc - x);
+    glVertex2i(xc + x, yc - y);
+    glVertex2i(xc + y, yc - x);
+    glEnd();
+
+    if (p < 0)
+      p += 4 * x++ + 6;
+    else
+      p += 4 * (x++ - y--) + 10;
   }
+  glFlush();
+}
 
-  SimpleLine(points[j].xc, points[j].yc, points[0].xc, points[0].yc);
-
-  glEnd();
+void drawPolygon(int x[], int y[], int n)
+{
+  for (int j = 0; j < n - 1; j++)
+  {
+    SimpleLine(x[j], y[j], x[j + 1], y[j + 1]);
+  }
+  SimpleLine(x[n - 1], y[n - 1], x[0], y[0]);
   glFlush();
 }
 
@@ -206,106 +217,37 @@ void myDisplay()
 {
   glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
   glClear(GL_COLOR_BUFFER_BIT);
-  glColor3f(0.0f, 0.0f, 0.0f);
-  SimpleLine(0, 300, 600, 300);
-  SimpleLine(300, 0, 300, 600);
-
-  if (!flag && n > 0)
-  {
-    drawPolygon(p, n); // Draw original
-
-    if (translated)
-    {
-      drawPolygon(translated_p, n); // draw translated polygon
-    }
-    if (scaled)
-    {
-      drawPolygon(scaled_p, n); // draw scaled polygon
-    }
-  }
-  glFlush();
 }
 
-void translate(int tx, int ty)
+void myMouse(int button, int state, int mx, int my)
 {
-  for (int j = 0; j < n; j++)
+  if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && flag)
   {
-    translated_p[j].xc = p[j].xc + tx;
-    translated_p[j].yc = p[j].yc + ty;
+    x[i] = mx;
+    y[i] = 600 - my;
+    i++;
   }
-  translated = true;
-  glutPostRedisplay();
-}
+  else if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN && flag)
+  {
+    n = i;
+    drawPolygon(x, y, n);
 
-void scaling(int sx, int sy)
-{
-  for (int j = 0; j < n; j++)
-  {
-    scaled_p[j].xc = round(p[j].xc * sx);
-    scaled_p[j].yc = round(p[j].yc * sy);
-  }
-  scaled = true;
-  glutPostRedisplay();
-}
+    double a = sqrt(pow(x[2] - x[1], 2.0) + pow(y[2] - y[1], 2.0));
+    double b = sqrt(pow(x[2] - x[0], 2.0) + pow(y[2] - y[0], 2.0));
+    double c = sqrt(pow(x[1] - x[0], 2.0) + pow(y[1] - y[0], 2.0));
 
-void menu(int choice)
-{
-  switch (choice)
-  {
-  case 1: // Translate
-    cout << "\n enter tx and ty: ";
-    cin >> tx >> ty;
-    translate(tx, ty);
-    break;
-  case 2: // Scaling
-    cout << "\n enter sx and sy: ";
-    cin >> sx >> sy;
-    scaling(sx, sy);
-    break;
-  case 3:
-    exit(0);
-  }
-  glutPostRedisplay();
-}
+    double xi = (a * x[0] + b * x[1] + c * x[2]) / (a + b + c);
+    double yi = (a * y[0] + b * y[1] + c * y[2]) / (a + b + c);
 
-void myMouse(int button, int state, int x, int y)
-{
-  if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-  {
-    if (flag == true && i < 10)
-    {
-      p[i].xc = x;
-      p[i].yc = 600 - y;
-      displayPoint(x, 600 - y);
-      i++;
-      glFlush();
-    }
-  }
-  else if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
-  {
-    if (flag == true && i >= 3)
-    {
-      n = i;
-      // Initialize translated and scaled polygons with the original
-      for (int j = 0; j < n; j++)
-      {
-        translated_p[j] = p[j];
-        scaled_p[j] = p[j];
-      }
-      drawPolygon(p, n); // Draw the initial polygon
-      flag = false;
-      translated = false; // Reset transformation flags
-      scaled = false;
-      glutCreateMenu(menu);
-      glutAddMenuEntry("1. Translate", 1);
-      glutAddMenuEntry("2. Scaling", 2);
-      glutAddMenuEntry("3. Exit", 3);
-      glutAttachMenu(GLUT_RIGHT_BUTTON);
-    }
-    else if (flag == true)
-    {
-      cout << "Please select at least 3 vertices to form a polygon." << endl;
-    }
+    double area = 0.5 * abs(x[0] * (y[1] - y[2]) + x[1] * (y[2] - y[0]) + x[2] * (y[0] - y[1]));
+    double s = (a + b + c) / 2.0;
+    double r = area / s;
+
+    drawCircle(xi, yi, r);
+    cout << "Incenter: (" << xi << ", " << yi << "), Radius: " << r << endl;
+
+    flag = false;
+    glFlush();
   }
 }
 
@@ -314,12 +256,14 @@ int main(int argc, char **argv)
   glutInit(&argc, argv);
   glutInitWindowPosition(0, 0);
   glutInitWindowSize(600, 600);
-  glutCreateWindow("Original and Transformed Polygon");
+  glutCreateWindow("Triangle with Inscribed Circle");
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   gluOrtho2D(0, 600, 0, 600);
+
   glutDisplayFunc(myDisplay);
   glutMouseFunc(myMouse);
+
   glutMainLoop();
-  return (0);
+  return 0;
 }
