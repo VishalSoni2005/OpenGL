@@ -41,7 +41,7 @@ void myDisplay()
     glEnd();
 }
 
-void translate(int tx, int ty)
+void translate(int tx, int ty, int n)
 {
     myDisplay();
     drawPolygon(p, n);
