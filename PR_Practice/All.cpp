@@ -575,167 +575,167 @@
 // }
 
 //! 4 ( MOUSE CLICK CIRCLE )
-// #include <GL/freeglut.h>
-// #include <vector>
-// #include <iostream>
-// #include <cmath>
-// using namespace std;
+#include <GL/freeglut.h>
+#include <vector>
+#include <iostream>
+#include <cmath>
+using namespace std;
 
-// struct points{
-//   int x;
-//   int y;
-// };
+struct points{
+  int x;
+  int y;
+};
 
-// vector<pair<int, int> >circleCordinates;
+vector<pair<int, int> >circleCordinates;
 
-// void line(int x1, int y1, int x2, int y2)
-// {
-//   int sx = (x2 > x1) ? 1 : -1;
-//   int sy = (y2 > y1) ? 1 : -1;
+void line(int x1, int y1, int x2, int y2)
+{
+  int sx = (x2 > x1) ? 1 : -1;
+  int sy = (y2 > y1) ? 1 : -1;
 
-//   int dy = abs(y2 - y1);
-//   int dx = abs(x2 - x1);
+  int dy = abs(y2 - y1);
+  int dx = abs(x2 - x1);
 
-//   int p;
+  int p;
 
-//   int x = x1, y = y1;
+  int x = x1, y = y1;
 
-//   glBegin(GL_POINTS);
-//   glVertex2i(x, y); // Plot point
+  glBegin(GL_POINTS);
+  glVertex2i(x, y); // Plot point
 
-//   if (dx > dy)
-//   {
+  if (dx > dy)
+  {
 
-//     p = 2 * dy - dx;
-//     for (int i = 0; i <= dx; i++)
-//     {
-//       glVertex2i(x, y); // Plot point
-//       x += sx;
-//       if (p < 0)
-//         p += 2 * dy;
-//       else
-//       {
-//         y += sy;
-//         p += 2 * (dy - dx);
-//       }
-//     }
-//   }
+    p = 2 * dy - dx;
+    for (int i = 0; i <= dx; i++)
+    {
+      glVertex2i(x, y); // Plot point
+      x += sx;
+      if (p < 0)
+        p += 2 * dy;
+      else
+      {
+        y += sy;
+        p += 2 * (dy - dx);
+      }
+    }
+  }
 
-//   else
-//   {
-//     p = 2 * dx - dy;
-//     for (int i = 0; i <= dy; i++)
-//     {
-//       glVertex2i(x, y); // Plot point
-//       y += sy;
-//       if (p < 0)
-//         p += 2 * dx;
-//       else
-//       {
-//         x += sx;
-//         p += 2 * (dx - dy);
-//       }
-//     }
-//   }
+  else
+  {
+    p = 2 * dx - dy;
+    for (int i = 0; i <= dy; i++)
+    {
+      glVertex2i(x, y); // Plot point
+      y += sy;
+      if (p < 0)
+        p += 2 * dx;
+      else
+      {
+        x += sx;
+        p += 2 * (dx - dy);
+      }
+    }
+  }
 
-//   glEnd();
-//   glFlush();
-// }
+  glEnd();
+  glFlush();
+}
 
-// void plotCirclePoint(int xc, int yc, int x, int y)
-// {
-//   glVertex2i(xc + x, yc + y);
-//   glVertex2i(xc - x, yc + y);
-//   glVertex2i(xc + x, yc - y);
-//   glVertex2i(xc - x, yc - y);
-//   glVertex2i(xc + y, yc + x);
-//   glVertex2i(xc - y, yc + x);
-//   glVertex2i(xc + y, yc - x);
-//   glVertex2i(xc - y, yc - x);
-// }
+void plotCirclePoint(int xc, int yc, int x, int y)
+{
+  glVertex2i(xc + x, yc + y);
+  glVertex2i(xc - x, yc + y);
+  glVertex2i(xc + x, yc - y);
+  glVertex2i(xc - x, yc - y);
+  glVertex2i(xc + y, yc + x);
+  glVertex2i(xc - y, yc + x);
+  glVertex2i(xc + y, yc - x);
+  glVertex2i(xc - y, yc - x);
+}
 
-// void circle(int xc, int yc, int r)
-// {
-//   int x = 0, y = r;
-//   int d = 3 - 2 * r;
+void circle(int xc, int yc, int r)
+{
+  int x = 0, y = r;
+  int d = 3 - 2 * r;
 
-//   glBegin(GL_POINTS);
-//   plotCirclePoint(xc, yc, x, y);
+  glBegin(GL_POINTS);
+  plotCirclePoint(xc, yc, x, y);
 
-//   while (y >= x)
-//   {
-//     x++;
-//     plotCirclePoint(xc, yc, x, y);
-//     if (d < 0)
-//       d += 4 * x + 6;
-//     else
-//     {
-//       y--;
-//       d += 4 * (x - y) + 10;
-//     }
-//   }
+  while (y >= x)
+  {
+    x++;
+    plotCirclePoint(xc, yc, x, y);
+    if (d < 0)
+      d += 4 * x + 6;
+    else
+    {
+      y--;
+      d += 4 * (x - y) + 10;
+    }
+  }
 
-//   glEnd();
-//   glFlush();
-// }
+  glEnd();
+  glFlush();
+}
 
-// void init()
-// {
-//   glClearColor(1, 1, 1, 1); // white background
-//   glPointSize(2);
-//   gluOrtho2D(0, 600, 0, 600);
-// }
+void init()
+{
+  glClearColor(1, 1, 1, 1); // white background
+  glPointSize(2);
+  gluOrtho2D(0, 600, 0, 600);
+}
 
-// void drawAxis()
-// {
-//   glColor3f(0, 1, 0.2); // green axes
-//   glBegin(GL_LINES);
-//   glVertex2i(300, 0);
-//   glVertex2i(300, 600); // Y-axis
-//   glVertex2i(0, 300);
-//   glVertex2i(600, 300); // X-axis
-//   glEnd();
-// }
+void drawAxis()
+{
+  glColor3f(0, 1, 0.2); // green axes
+  glBegin(GL_LINES);
+  glVertex2i(300, 0);
+  glVertex2i(300, 600); // Y-axis
+  glVertex2i(0, 300);
+  glVertex2i(600, 300); // X-axis
+  glEnd();
+}
 
-// int clickX = 0, clickY = 0; // Declare variables to store mouse click coordinates
+int clickX = 0, clickY = 0; // Declare variables to store mouse click coordinates
 
-// void mousefn(int button, int state, int x, int y)
-// {
-//   if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-//   {
-//     clickX = x;
-//     clickY = 600 - y;    // Flip y to match OpenGL coords
-//     circleCordinates.push_back({ clickX, clickY});
-//     glutPostRedisplay(); // Ask //GLUT to call display()
-//   }
-// }
+void mousefn(int button, int state, int x, int y)
+{
+  if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+  {
+    clickX = x;
+    clickY = 600 - y;    // Flip y to match OpenGL coords
+    circleCordinates.push_back({ clickX, clickY});
+    glutPostRedisplay(); // Ask //GLUT to call display()
+  }
+}
 
-// void display()
-// {
-//   glClear(GL_COLOR_BUFFER_BIT);
+void display()
+{
+  glClear(GL_COLOR_BUFFER_BIT);
 
-//   // if(clickX > 0)
-//   //   circle(clickX, clickY, 200);
+  // if(clickX > 0)
+  //   circle(clickX, clickY, 200);
 
-//   for(auto&i : circleCordinates) {
-//     circle(i.first, i.second, 50);
-//   }
-//   drawAxis();
+  for(auto&i : circleCordinates) {
+    circle(i.first, i.second, 50);
+  }
+  drawAxis();
 
-//   glFlush();
-// }
+  glFlush();
+}
 
-// int main(int argc, char **argv)
-// {
-//   glutInit(&argc, argv);
-//   glutInitDisplayMode(GLUT_SINGLE);
-//   glutInitWindowPosition(0, 0);
-//   glutInitWindowSize(600, 600);
-//   glutCreateWindow("4");
+int main(int argc, char **argv)
+{
+  glutInit(&argc, argv);
+  glutInitDisplayMode(GLUT_SINGLE);
+  glutInitWindowPosition(0, 0);
+  glutInitWindowSize(600, 600);
+  glutCreateWindow("4");
 
-//   init();
-//   glutDisplayFunc(display);
-//   glutMouseFunc(mousefn);
-//   glutMainLoop();
-//   return 0;
-// }
+  init();
+  glutDisplayFunc(display);
+  glutMouseFunc(mousefn);
+  glutMainLoop();
+  return 0;
+}

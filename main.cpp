@@ -1,108 +1,217 @@
-/*//! Chit No.15
-instructions: first left click to select center and second left click to select radius*/
-#include <GL/glut.h>
-#include <stdlib.h>
+// /*//! Chit No.15
+// instructions: first left click to select center and second left click to select radius*/
+// #include <GL/glut.h>
+// #include <stdlib.h>
+// #include <cmath>
+
+// // Removed redefinition of M_PI as it is already defined in <cmath>
+
+// int xc, yc, r;
+// bool flag = true; //* this flag is for two taking two points
+// // Function to implement Bresenham's circle drawing algorithm
+// void drawCircle(int xc, int yc, int r)
+// {
+//   int x = 0, y = r;
+//   int d = 3 - 2 * r;
+
+//   glBegin(GL_POINTS);
+//   while (x <= y)
+//   {
+//     glVertex2i(xc + x, yc + y);
+//     glVertex2i(xc + y, yc + x);
+//     glVertex2i(xc - x, yc + y);
+//     glVertex2i(xc - y, yc + x);
+//     glVertex2i(xc - x, yc - y);
+//     glVertex2i(xc - y, yc - x);
+//     glVertex2i(xc + x, yc - y);
+//     glVertex2i(xc + y, yc - x);
+//     if (d < 0)
+//     {
+//       d = d + 4 * x + 6;
+//     }
+//     else
+//     {
+//       d = d + 4 * (x - y) + 10;
+//       y--;
+//     }
+//     x++;
+//   }
+//   glEnd();
+// }
+
+// void draw(int x, int y, int r)
+// {
+
+//   drawCircle(x, y, r);
+//   drawCircle(x, y, r + 40);
+
+//   float inc = 2 * 3.14 / 6;
+//   for (int i = 0; i <= 6; i++)
+//   {
+//     int angleInc = inc * i;
+//     int j = xc + (2 * r * cos(angleInc));
+//     int k = yc + (2 * r * sin(angleInc));
+//     drawCircle(j, k, r);
+//   }
+
+//   glFlush();
+// }
+
+// void myMouse(int button, int state, int x, int y)
+// {
+//   if (button == GLUT_LEFT_BUTTON and state == GLUT_DOWN)
+//   {
+//     if (flag == true)
+//     {
+//       xc = x;
+//       yc = 600 - y;
+//       flag = false;
+//     }
+//     else
+//     {
+
+//       r = abs(xc - x);
+//       draw(xc, yc, r);
+//       glutPostRedisplay();
+//       flag = false;
+//     }
+//   }
+// }
+
+// void display()
+// {
+//   glClear(GL_COLOR_BUFFER_BIT);
+//   glColor3f(0.0, 0.0, 0.0); // Set color to black
+//   glutMouseFunc(myMouse);
+//   glFlush();
+// }
+// void init()
+// {
+//   glClearColor(1.0, 1.0, 1.0, 0.0); // Set background color to white
+//   glPointSize(2.0);                 // Set point size for better visibility
+//   glMatrixMode(GL_PROJECTION);
+//   glLoadIdentity();
+//   gluOrtho2D(0, 600, 0, 600); // Set the viewing area
+// }
+
+// int main(int argc, char **argv)
+// {
+//   glutInit(&argc, argv);
+//   glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+//   glutInitWindowSize(600, 600);
+//   glutInitWindowPosition(0, 0);
+//   glutCreateWindow("bresenham's circle");
+//   init();
+//   glutDisplayFunc(display);
+//   glutMainLoop();
+//   return 0;
+// }
+
+//! chit one
+#include <GL/freeglut.h>
+#include <iostream>
 #include <cmath>
+using namespace std;
 
-// Removed redefinition of M_PI as it is already defined in <cmath>
+int centerX = -1, centerY = -1, radius = -1;
 
-int xc, yc, r;
-bool flag = true; //* this flag is for two taking two points
-// Function to implement Bresenham's circle drawing algorithm
-void drawCircle(int xc, int yc, int r)
+void axes()
+{
+  glBegin(GL_LINES);
+  glColor3f(0, 0, 0);
+  glVertex2i(300, 0);
+  glVertex2i(300, 600);
+  glVertex2i(0, 300);
+  glVertex2i(600, 300);
+  glEnd();
+}
+
+void plot(int xc, int yc, int x, int y)
+{
+  glVertex2i(xc + x, yc + y);
+  glVertex2i(xc - x, yc + y);
+  glVertex2i(xc + x, yc - y);
+  glVertex2i(xc - x, yc - y);
+  glVertex2i(xc + y, yc + x);
+  glVertex2i(xc - y, yc + x);
+  glVertex2i(xc + y, yc - x);
+  glVertex2i(xc - y, yc - x);
+}
+
+void circle(int xc, int yc, int r)
 {
   int x = 0, y = r;
-  int d = 3 - 2 * r;
+  int p = 3 - 2 * r;
 
   glBegin(GL_POINTS);
-  while (x <= y)
+  while (y >= x)
   {
-    glVertex2i(xc + x, yc + y);
-    glVertex2i(xc + y, yc + x);
-    glVertex2i(xc - x, yc + y);
-    glVertex2i(xc - y, yc + x);
-    glVertex2i(xc - x, yc - y);
-    glVertex2i(xc - y, yc - x);
-    glVertex2i(xc + x, yc - y);
-    glVertex2i(xc + y, yc - x);
-    if (d < 0)
-    {
-      d = d + 4 * x + 6;
-    }
+    plot(xc, yc, x, y);
+    x++;
+    if (p < 0)
+      p += 4 * x + 6;
     else
     {
-      d = d + 4 * (x - y) + 10;
       y--;
+      p += 4 * (x - y) + 10;
     }
-    x++;
   }
   glEnd();
 }
 
-void draw(int x, int y, int r)
-{
-
-  drawCircle(x, y, r);
-  drawCircle(x, y, r + 40);
-
-  float inc = 2 * 3.14 / 6;
-  for (int i = 0; i <= 6; i++)
-  {
-    int angleInc = inc * i;
-    int j = xc + (2 * r * cos(angleInc));
-    int k = yc + (2 * r * sin(angleInc));
-    drawCircle(j, k, r);
-  }
-
-  glFlush();
-}
+bool firstClick = true;
 
 void myMouse(int button, int state, int x, int y)
 {
-  if (button == GLUT_LEFT_BUTTON and state == GLUT_DOWN)
+  if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
   {
-    if (flag == true)
+    if (firstClick)
     {
-      xc = x;
-      yc = 600 - y;
-      flag = false;
+      centerX = x;
+      centerY = 600 - y;
+      firstClick = false;
     }
     else
     {
-
-      r = abs(xc - x);
-      draw(xc, yc, r);
-      glutPostRedisplay();
-      flag = false;
+      int x2 = x;
+      int y2 = 600 - y;
+      radius = sqrt((x2 - centerX) * (x2 - centerX) + (y2 - centerY) * (y2 - centerY));
+      firstClick = true;
+      glutPostRedisplay(); // Triggers display()
     }
   }
+}
+
+void init()
+{
+  glClearColor(1.0, 1.0, 1.0, 0.0);
+  gluOrtho2D(0, 600, 0, 600);
+  glPointSize(2);
 }
 
 void display()
 {
   glClear(GL_COLOR_BUFFER_BIT);
-  glColor3f(0.0, 0.0, 0.0); // Set color to black
-  glutMouseFunc(myMouse);
+  axes();
+
+  if (centerX != -1 && radius != -1)
+  {
+    glColor3f(0, 0, 1);
+    circle(centerX, centerY, radius);
+  }
+
   glFlush();
-}
-void init()
-{
-  glClearColor(1.0, 1.0, 1.0, 0.0); // Set background color to white
-  glPointSize(2.0);                 // Set point size for better visibility
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  gluOrtho2D(0, 600, 0, 600); // Set the viewing area
 }
 
 int main(int argc, char **argv)
 {
   glutInit(&argc, argv);
-  glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+  glutInitDisplayMode(GLUT_SINGLE);
   glutInitWindowSize(600, 600);
-  glutInitWindowPosition(0, 0);
-  glutCreateWindow("bresenham's circle");
+  glutCreateWindow("Circle Drawing");
   init();
   glutDisplayFunc(display);
+  glutMouseFunc(myMouse);
   glutMainLoop();
   return 0;
 }
