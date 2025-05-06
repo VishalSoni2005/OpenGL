@@ -324,7 +324,7 @@
 // {
 //   clearScreenWithAxes();
 
-//   // Draw original triangle in black
+  // Draw original triangle in black
 //   drawPolygon(originalTriangle, 3, 0, 0, 0);
 
 //   // Apply translation
@@ -581,10 +581,6 @@
 #include <cmath>
 using namespace std;
 
-struct points{
-  int x;
-  int y;
-};
 
 vector<pair<int, int> >circleCordinates;
 
