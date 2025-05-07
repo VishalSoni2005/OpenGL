@@ -37,6 +37,7 @@
 //       glVertex2i(x, y);
 //       y += sy;
 //       if (p < 0)
+
 //         p += 2 * dx;
 //       else
 //       {

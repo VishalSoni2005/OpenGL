@@ -45,6 +45,8 @@ void drawLine(int x1, int y1, int x2, int y2) {
     glFlush();
 }
 
+
+
 void drawChessboard(int boardSize) {
     int squareSize = WINDOW_SIZE / boardSize;
 
@@ -71,6 +73,9 @@ void drawChessboard(int boardSize) {
         }
     }
 }
+
+
+
 
 void initOpenGL() {
     glClearColor(0.8, 0.8, 0.8, 1.0); 
